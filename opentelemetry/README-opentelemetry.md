@@ -18,6 +18,7 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [community](https://github.com/open-telemetry/community)  
  [OpenTelemetry — Voronezh Toptal Meetup (обзорное видео на русском про OpenTelemetry)](https://www.youtube.com/watch?v=Tf0uMwTrEd8)  
  [https://medium.com/opentelemetry](https://medium.com/opentelemetry)
+ [OpenTelemetry: beyond getting started](https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26)
  
  
  [Open tracing](https://opentracing.io/docs/overview/)  
