@@ -16,6 +16,7 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Слияние OpenTracing и OpenCensus: путь к конвергенции](https://habr.com/ru/company/southbridge/blog/464001/)  
  [Opentelemetry registry](https://opentelemetry.io/registry/)  
  [community](https://github.com/open-telemetry/community)  
+ [OpenTelemetry — Voronezh Toptal Meetup](https://www.youtube.com/watch?v=Tf0uMwTrEd8)  
  
  
  [Open tracing](https://opentracing.io/docs/overview/)  
