@@ -111,7 +111,7 @@ Jaeger-ui будет доступен по адресу **localhost:16686**.
 - При использовании **opentracing** трэйсы энндпойнтов с опирациями с базой данных включают
 в себя span-ы  работы с базой (SQL), при использовании **opentelemetry** - span-ы эндпойнтов - независимы.
 
-- Необходимо сделать сервис на Flask для проверки интеграции серивсов с **opentelemetry** (т.к. есть в **opentelemetry**
+- Необходимо сделать сервис на Flask для проверки интеграции серивсов с **opentelemetry** (т.к. в **opentelemetry**
 уже есть **OpenTelemetry WSGI Middleware**,  **OpenTelemetry Flask Integration**) с сервисами с **opentracing**.
 
 
