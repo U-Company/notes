@@ -1,0 +1,32 @@
+python-dotenv
+loguru
+PyJWT
+fastapi
+pathlib
+passlib[bcrypt]
+Werkzeug
+python-multipart
+uvicorn
+pytest
+aiosqlite
+#aiomysql
+#databases[mysql]
+#mysqlclient
+databases[sqlite]
+
+#  opentracing
+jaeger-client
+opentracing_instrumentation
+requests
+-e git://github.com/acidjunk/starlette-opentracing.git#egg=Starlette-OpenTracing
+tornado==5.1.1  # pin to last release for 5, implicit install of 6 gives errors
+
+#  opentelemetry
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-ext-jaeger
+opentelemetry-ext-sqlalchemy
+opentelemetry-opentracing-shim
+
+
+
