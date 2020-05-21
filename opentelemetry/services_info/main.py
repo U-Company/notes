@@ -56,14 +56,14 @@ app = FastAPI()
 trace.set_tracer_provider(TracerProvider())
 
 jaeger_exporter = jaeger.JaegerSpanExporter(
-    service_name=service_name, agent_host_name="localhost", agent_port=6831
+    service_name=f"{service_name}_opentelemetry", agent_host_name="localhost", agent_port=6831
 )
 
 trace.get_tracer_provider().add_span_processor(
     SimpleExportSpanProcessor(jaeger_exporter)
 )
 # Create an OpenTelemetry Tracer.
-otel_tracer = trace.get_tracer(service_name)
+# otel_tracer = trace.get_tracer(service_name)
 
 # Create an OpenTracing shim.
 # shim = create_tracer(otel_tracer)
@@ -80,11 +80,11 @@ opentracing_config = jaeger_config(
         "local_agent": {"reporting_host": "localhost"},
     },
     scope_manager=ContextVarsScopeManager(),
-    service_name= service_name,
+    service_name= f"{service_name}_opentracing",
 )
 jaeger_tracer = opentracing_config.initialize_tracer()
 install_all_patches()
-# app.add_middleware(StarletteTracingMiddleWare, tracer=shim)             # Использовать opentelemetry
+app.add_middleware(StarletteTracingMiddleWare, tracer=shim)             # Использовать opentelemetry
 app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)      # Использовать opentracing
 
 # =========
@@ -151,22 +151,24 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": f"Hello from NITI Services API. app name: {version.app_name} "
+    return {"message": f"Hello from OpenTacing and OpenTelemetry demo app. app name: {version.app_name} "
                        f"V.{version.app_version}  {cfg['stage']}"}
 
 
-@app.get("/ot")
-async def ot():
+@app.get("/ProcessHTTPRequest")
+async def httprequest():
     with shim.start_active_span("ProcessHTTPRequest"):
         print("Processing HTTP request")
+        logger.info("Processing HTTP request")
         # Sleeping to mock real work.
         time.sleep(0.1)
         with shim.start_active_span("GetDataFromDB"):
             print("Getting data from DB")
+            logger.info("Getting data from DB")
             # Sleeping to mock real work.
             time.sleep(0.2)
 
-    return {"message": f"OpenTracing Shim for OpenTelemetry."}
+    return {"message": f"OpenTracing and OpenTelemetry."}
 
 class Message(BaseModel):
     message: str
