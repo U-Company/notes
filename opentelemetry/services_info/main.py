@@ -84,8 +84,8 @@ opentracing_config = jaeger_config(
 )
 jaeger_tracer = opentracing_config.initialize_tracer()
 install_all_patches()
-# app.add_middleware(StarletteTracingMiddleWare, tracer=shim)
-app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)
+# app.add_middleware(StarletteTracingMiddleWare, tracer=shim)             # Использовать opentelemetry
+app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)      # Использовать opentracing
 
 # =========
 
