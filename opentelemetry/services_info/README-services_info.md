@@ -106,6 +106,17 @@ app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)
 
 Jaeger-ui будет доступен по адресу **localhost:16686**.
 
+## Предварительные выводы.
+
+- При использовании **opentracing** трэйсы энндпойнтов с опирациями с базой данных включают
+в себя span-ы  работы с базой (SQL), при использовании **opentelemetry** - span-ы эндпойнтов - независимы.
+
+- Необходимо сделать сервис на Flask для проверки интеграции серивсов с **opentelemetry** (т.к. есть в **opentelemetry**
+уже есть **OpenTelemetry WSGI Middleware**,  **OpenTelemetry Flask Integration**) с сервисами с **opentracing**.
+
+
+directed acyclic graph
+
 
 
 
