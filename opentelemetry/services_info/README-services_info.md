@@ -84,7 +84,7 @@ app.add_middleware(StarletteTracingMiddleWare, tracer=shim)
 ```
 подключает **opentelemetry**.
 
-Строка 87:
+Строка 88:
 ``` Python
 app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)
 ```
