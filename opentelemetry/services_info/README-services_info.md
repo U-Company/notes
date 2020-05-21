@@ -115,7 +115,7 @@ Jaeger-ui будет доступен по адресу **localhost:16686**.
 уже есть **OpenTelemetry WSGI Middleware**,  **OpenTelemetry Flask Integration**) с сервисами с **opentracing**.
 
 
-directed acyclic graph
+
 
 
 
