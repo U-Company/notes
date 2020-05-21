@@ -12,7 +12,7 @@
  
 ## Конфигурация сервиса
 
-Файл с конфигурацией расположена в ***.deploy/.envs***, по умолчанию имя конфигурационного файла 
+Файл с конфигурацией расположен в ***.deploy/.envs***, по умолчанию имя конфигурационного файла 
 ***dev.env***.  
 Адрес сервиса (по умолчанию): ***localhost:40100***  
 Для авторизации в сервисе следует ввести ввести имя и пароль (авторизация будет успешной при совпадении имени и пароля).  
@@ -84,7 +84,7 @@ app.add_middleware(StarletteTracingMiddleWare, tracer=shim)
 ```
 подключает **opentelemetry**.
 
-Строка 87:
+Строка 88:
 ``` Python
 app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)
 ```
@@ -111,11 +111,11 @@ Jaeger-ui будет доступен по адресу **localhost:16686**.
 - При использовании **opentracing** трэйсы энндпойнтов с опирациями с базой данных включают
 в себя span-ы  работы с базой (SQL), при использовании **opentelemetry** - span-ы эндпойнтов - независимы.
 
-- Необходимо сделать сервис на Flask для проверки интеграции серивсов с **opentelemetry** (т.к. есть в **opentelemetry**
+- Необходимо сделать сервис на Flask для проверки интеграции серивсов с **opentelemetry** (т.к. в **opentelemetry**
 уже есть **OpenTelemetry WSGI Middleware**,  **OpenTelemetry Flask Integration**) с сервисами с **opentracing**.
 
 
-directed acyclic graph
+
 
 
 
