@@ -4,7 +4,7 @@ import time
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import HTTPException
 from fastapi import Depends
-
+import logging
 
 # opentracing --------
 from jaeger_client import Config as jaeger_config
@@ -48,6 +48,9 @@ service_name = f"{version.app_name} v.{version.app_version}"
 cfg = utils.init_env_and_logger()
 logger = cfg['logger']
 
+logging.getLogger('').handlers = []
+logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+
 app = FastAPI()
 
 # Добавить реализцию для OpenTracing Shim for OpenTelemetry
@@ -82,10 +85,10 @@ opentracing_config = jaeger_config(
     scope_manager=ContextVarsScopeManager(),
     service_name= f"{service_name}_opentracing",
 )
-jaeger_tracer = opentracing_config.initialize_tracer()
+tracer_opentracing = opentracing_config.initialize_tracer()
 install_all_patches()
 app.add_middleware(StarletteTracingMiddleWare, tracer=shim)             # Использовать opentelemetry
-app.add_middleware(StarletteTracingMiddleWare, tracer=jaeger_tracer)      # Использовать opentracing
+app.add_middleware(StarletteTracingMiddleWare, tracer=tracer_opentracing)      # Использовать opentracing
 
 # =========
 
@@ -155,20 +158,61 @@ async def root():
                        f"V.{version.app_version}  {cfg['stage']}"}
 
 
-@app.get("/ProcessHTTPRequest")
-async def httprequest():
-    with shim.start_active_span("ProcessHTTPRequest"):
-        print("Processing HTTP request")
-        logger.info("Processing HTTP request")
+@app.get("/ProcessHTTPRequestOpenTelemetry")
+async def httprequestopentelemetry():
+    with shim.start_active_span("ProcessHTTPRequestTelemetry"):
+        print("Processing HTTP request (OpenTelemetry)")
+        logger.info("Processing HTTP request (OpenTelemetry)")
         # Sleeping to mock real work.
         time.sleep(0.1)
-        with shim.start_active_span("GetDataFromDB"):
-            print("Getting data from DB")
-            logger.info("Getting data from DB")
+        with shim.start_active_span("GetDataFromDB (Emulated) (OpenTelemetry)"):
+            print("Getting data from DB (OpenTelemetry)")
+            logger.info("Getting data from DB (OpenTelemetry)")
             # Sleeping to mock real work.
             time.sleep(0.2)
 
-    return {"message": f"OpenTracing and OpenTelemetry."}
+    return {"message": f"OpenTracing and OpenTelemetry (OpenTelemetry)."}
+
+
+@app.get("/ProcessHTTPRequestOpenTracing")
+async def httprequestopentracing():
+    hello_to = "OpenTracing"
+    with tracer_opentracing.start_span('say-hello') as span:
+        span.set_tag('hello-to', hello_to)
+        hello_str = 'Hello, %s!' % hello_to
+        span.log_kv({'event': 'string-format', 'value': hello_str})
+
+        print(hello_str)
+        span.log_kv({'event': 'println'})
+    return {"message": f"OpenTracing and OpenTelemetry (OpenTelemetry)."}
+
+
+def say_hello(hello_to):
+    with tracer_opentracing.start_active_span('say-hello') as scope:
+        scope.span.set_tag('hello-to', hello_to)
+        hello_str = format_string(hello_to)
+        print_hello(hello_str)
+
+
+def format_string(hello_to):
+    with tracer_opentracing.start_active_span('format') as scope:
+        hello_str = 'Hello, %s!' % hello_to
+        scope.span.log_kv({'event': 'string-format', 'value': hello_str})
+        return hello_str
+
+
+def print_hello(hello_str):
+    with tracer_opentracing.start_active_span('println') as scope:
+        print(hello_str)
+        scope.span.log_kv({'event': 'println'})
+
+
+@app.get("/helloopentracing")
+async def helloopentracing():
+    hello_to = "OpenTracing"
+    say_hello(hello_to)
+    return {"message": f"OpenTracing and OpenTelemetry (OpenTelemetry)."}
+
 
 class Message(BaseModel):
     message: str
