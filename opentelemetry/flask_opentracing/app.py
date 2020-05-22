@@ -1,18 +1,24 @@
 import requests
 import sys
 import time
+import logging
+import json
 
-from flask import Flask, Blueprint, request
+from flask import Flask, Blueprint, request, jsonify
 from flask_restx import Api, Resource, fields
 
-from opentelemetry.lib.tracing import init_tracer
+from lib.tracing import init_tracer
 from opentracing.ext import tags
 from opentracing.propagation import Format
 
-api_v1 = Blueprint("api", __name__, url_prefix="/api/1")
-api = Api(api_v1, version="1.0", title="Todo API", description="A simple TODO API",)
+log_level = logging.DEBUG
+logging.getLogger('').handlers = []
+logging.basicConfig(format='%(asctime)s %(message)s', level=log_level)
 
-ns = api.namespace("todos", description="TODO operations")
+api_v1 = Blueprint("api", __name__, url_prefix="/api/1")
+api = Api(api_v1, version="1.0", title="OpenTracing API", description="A simple OpenTracing API",)
+
+ns = api.namespace("opentracing", description="OpenTracing operations")
 
 TODOS = {
     "todo1": {"task": "build an API"},
@@ -97,27 +103,28 @@ tracer = init_tracer('flask_opentrasing')
 host = "localhost"
 port = 40100
 
-def say_hello(host, hello_to):
-    with tracer.start_active_span('say-hello') as scope:
-        scope.span.set_tag('hello-to', hello_to)
-        hello_str = format_string(host, hello_to)
-        print_hello(host, hello_str)
+
+def say_hello_opentracing(host, hello_to):
+    with tracer.start_active_span('say-hello_opentracing') as scope:
+        scope.span.set_tag('hello-to_opentracing', hello_to)
+        hello_str = format_string_opentracing(host, hello_to)
+        print_hello_opentracing(host, hello_str)
 
 
-def format_string(host, hello_to):
-    with tracer.start_active_span('format') as scope:
-        hello_str = http_get(host, port, 'format', 'helloTo', hello_to)
+def format_string_opentracing(host, hello_to):
+    with tracer.start_active_span(f'format_opentracing') as scope:
+        hello_str = http_get_opentracing(host, port, 'format', 'helloTo', hello_to)
         scope.span.log_kv({'event': 'string-format', 'value': hello_str})
         return hello_str
 
 
-def print_hello(hello_str):
-    with tracer.start_active_span('println') as scope:
-        http_get(host, port, 'publish', 'helloStr', hello_str)
+def print_hello_opentracing(host, hello_str):
+    with tracer.start_active_span('println_opentracing') as scope:
+        http_get_opentracing(host, port, 'publish', 'helloStr', hello_str)
         scope.span.log_kv({'event': 'println'})
 
 
-def http_get(host, port, path, param, value):
+def http_get_opentracing(host, port, path, param, value):
     url = f'http://{host}:{port}/{path}'
 
     span = tracer.active_span
@@ -128,7 +135,7 @@ def http_get(host, port, path, param, value):
     tracer.inject(span, Format.HTTP_HEADERS, headers)
 
     r = requests.get(url, params={param: value}, headers=headers)
-    assert r.status_code == 200
+    # assert r.status_code == 200, f"Real status_code: {r.status_code}"
     return r.text
 
 
@@ -137,7 +144,55 @@ class Opentracing(Resource):
     @api.marshal_list_with(listed_todo)
     def get(self):
         """List all todos"""
-        say_hello(host, TODOS.items()[0]["todo"])
+        keys = list(TODOS.keys())
+        say_hello_opentracing(host, TODOS[keys[0]]["task"])
+        return [{"id": id, "todo": todo} for id, todo in TODOS.items()]
+
+
+@ns.route("/ProcessHTTPRequestOpenTracing")
+class ProcessHTTPRequestOpenTracing(Resource):
+    def get(self):
+        """
+        Переслать get-запрос ProcessHTTPRequestOpenTracing на services_info (localhost:40100/ProcessHTTPRequestOpenTracing)
+        """
+        span_ctx = tracer.extract(Format.HTTP_HEADERS, request.headers)
+        span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
+        # resp = None
+        with tracer.start_active_span('ProcessHTTPRequestOpenTracing', child_of=span_ctx, tags=span_tags):
+            resp = http_get_opentracing(host, port, "ProcessHTTPRequestOpenTracing", "param1", "value1")
+
+        return json.loads(resp)
+
+
+@ns.route("/ProcessHTTPRequest")
+class ProcessHTTPRequest(Resource):
+    def get(self):
+        """
+        Переслать get-запрос ProcessHTTPRequestOpenTracing на services_info (localhost:40100/ProcessHTTPRequestOpenTracing)
+        """
+        span_ctx = tracer.extract(Format.HTTP_HEADERS, request.headers)
+        span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
+        resp = None
+        with tracer.start_active_span('ProcessHTTPRequest', child_of=span_ctx, tags=span_tags):
+            resp = http_get_opentracing(host, port, "ProcessHTTPRequest", "param1", "value1")
+
+        return json.loads(resp)
+
+
+@ns.route("/opentracing_log")
+class Opentracing_log(Resource):
+    @api.marshal_list_with(listed_todo)
+    def get(self):
+        """List all todos"""
+        logging.getLogger("").debug(f"Opentracing_log 1")
+        with tracer.start_span('TestSpan') as span:
+            logging.getLogger("").debug(f"Opentracing_log 2")
+            span.log_kv({'event': 'test message', 'life': 42})
+
+            with tracer.start_span('ChildSpan', child_of=span) as child_span:
+                logging.getLogger("").debug(f"Opentracing_log 3")
+                span.log_kv({'event': 'up below'})
+                child_span.log_kv({'event': 'down below'})
         return [{"id": id, "todo": todo} for id, todo in TODOS.items()]
 
 
@@ -162,17 +217,6 @@ class Publish(Resource):
         TODOS[todo_id] = {"task": args["task"]}
         return TODOS[todo_id], 201
 
-    # @api.doc(description="todo_id should be in {0}".format(", ".join(TODOS.keys())))
-    # @api.marshal_with(todo)
-    # def get(self, todo_id):
-    #     """Fetch a given resource"""
-    #     span_ctx = tracer.extract(Format.HTTP_HEADERS, request.headers)
-    #     span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
-    #     with tracer.start_active_span('publish', child_of=span_ctx, tags=span_tags):
-    #         hello_str = request.args.get('helloStr')
-    #         print(hello_str)
-    #         return [{"id": id, "todo": todo} for id, todo in TODOS.items()]
-    #
 
 if __name__ == "__main__":
     app = Flask(__name__)

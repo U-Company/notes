@@ -3,13 +3,15 @@ import time
 
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import HTTPException
-from fastapi import Depends
+from fastapi import Depends, Request
 import logging
 
 # opentracing --------
 from jaeger_client import Config as jaeger_config
 from opentracing.scope_managers.contextvars import ContextVarsScopeManager
 from opentracing_instrumentation.client_hooks import install_all_patches
+from opentracing.ext import tags
+from opentracing.propagation import Format
 
 from starlette_opentracing import StarletteTracingMiddleWare
 
@@ -184,12 +186,19 @@ async def httprequestopentracing():
 
         print(hello_str)
         span.log_kv({'event': 'println'})
-    return {"message": f"OpenTracing and OpenTelemetry (OpenTelemetry)."}
+    return {"message": f"OpenTracing and OpenTelemetry (OpenTracing)."}
+
+
+@app.get("/ProcessHTTPRequest")
+async def httprequest():
+    return {"message": f"OpenTracing and OpenTelemetry (httprequest)."}
 
 
 def say_hello(hello_to):
     with tracer_opentracing.start_active_span('say-hello') as scope:
         scope.span.set_tag('hello-to', hello_to)
+        scope.span.log_kv({'event': 'string-format', 'value': hello_to})
+
         hello_str = format_string(hello_to)
         print_hello(hello_str)
 
@@ -197,6 +206,7 @@ def say_hello(hello_to):
 def format_string(hello_to):
     with tracer_opentracing.start_active_span('format') as scope:
         hello_str = 'Hello, %s!' % hello_to
+        scope.span.log_kv({'event': 'format'})
         scope.span.log_kv({'event': 'string-format', 'value': hello_str})
         return hello_str
 
@@ -205,13 +215,36 @@ def print_hello(hello_str):
     with tracer_opentracing.start_active_span('println') as scope:
         print(hello_str)
         scope.span.log_kv({'event': 'println'})
+        scope.span.log_kv({'event': 'string-format', 'value': hello_str})
+
+
+@app.get("/format")
+def format(request: Request):
+    rq = request
+    logger.debug(f"{rq}")
+    span_ctx = tracer_opentracing.extract(Format.HTTP_HEADERS, request.headers)
+    span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
+    with tracer_opentracing.start_active_span('format', child_of=span_ctx, tags=span_tags):
+        hello_to = request.query_params.get('helloTo')
+        return 'Hello, %s!' % hello_to
+
+
+@app.get("/publish")
+def publish(request: Request):
+    logger.debug(f"{request}")
+    span_ctx = tracer_opentracing.extract(Format.HTTP_HEADERS, request.headers)
+    span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
+    with tracer_opentracing.start_active_span('publish', child_of=span_ctx, tags=span_tags):
+        hello_str = request.query_params.get('helloStr')
+        print(hello_str)
+        return 'published'
 
 
 @app.get("/helloopentracing")
 async def helloopentracing():
     hello_to = "OpenTracing"
     say_hello(hello_to)
-    return {"message": f"OpenTracing and OpenTelemetry (OpenTelemetry)."}
+    return {"message": f"OpenTracing and OpenTelemetry (OpenTracing)."}
 
 
 class Message(BaseModel):
