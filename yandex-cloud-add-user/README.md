@@ -10,7 +10,6 @@ Connect to your machine by ssh:
 
     ssh username@1.2.3.4
     
-    
 Turn on `sudo` mode:
 
     sudo su
@@ -19,6 +18,11 @@ Create new user:
 
     mkdir ../username
     useradd username
+    
+Copy ssh-key to `username` homedir:
+
+    mkdir ../username/.ssh
+    mv id_rsa_key.pub ../username/.ssh/authorized_keys
 
 Create user to root group:
 
