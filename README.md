@@ -4,4 +4,4 @@
 
 [Deployments](./deployments/README.md)
 
-[Add user to yandex cloud](./yandex-cloud-add-user/README.md)
+[Add user to instance of yandex cloud](./yandex-cloud-add-user/README.md)
