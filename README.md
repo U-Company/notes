@@ -6,4 +6,4 @@
 
 [Add user to instance of yandex cloud](./yandex-cloud-add-user/README.md)
 
-[Service layout](./service layout/README.md)
+[Service layout](./layouts/README.md)
