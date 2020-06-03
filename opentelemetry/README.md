@@ -24,6 +24,7 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Open tracing](https://opentracing.io/docs/overview/)  
  [OpenTracing Tutorial - Python](https://github.com/yurishkuro/opentracing-tutorial/tree/master/python)  
  [Flask opentracing](https://github.com/opentracing-contrib/python-flask)  
+ [Flask-OpenTracing](https://pythonhosted.org/Flask-OpenTracing/)  
  [Tutorial: Tracing Python Flask requests with OpenTracing](https://scoutapm.com/blog/tutorial-tracing-python-flask-requests-with-opentracing)  
  https://opentelemetry-python.readthedocs.io/en/latest/  
  https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html  
