@@ -37,9 +37,9 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Jaeger docker images](https://www.jaegertracing.io/download/#docker-images)  
  
  ### Opentelemetry JavaScript
- [OpenTelemetry JavaScript API and SDK](https://github.com/open-telemetry/opentelemetry-js)
- [Getting Started with OpenTelemetry JS](https://github.com/open-telemetry/opentelemetry-js/tree/master/getting-started)
- [Пример использования](https://github.com/open-telemetry/opentelemetry-js/tree/master/packages/opentelemetry-web)
+ [OpenTelemetry JavaScript API and SDK](https://github.com/open-telemetry/opentelemetry-js)  
+ [Getting Started with OpenTelemetry JS](https://github.com/open-telemetry/opentelemetry-js/tree/master/getting-started)  
+ [Пример использования](https://github.com/open-telemetry/opentelemetry-js/tree/master/packages/opentelemetry-web)  
 
 ## Install opentelemetry
 
