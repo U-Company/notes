@@ -23,6 +23,7 @@ OpenTracing - это API, с которым ваш код будет взаим�
  
  [Open tracing](https://opentracing.io/docs/overview/)  
  [OpenTracing Tutorial - Python](https://github.com/yurishkuro/opentracing-tutorial/tree/master/python)  
+ [Flask opentracing](https://github.com/opentracing-contrib/python-flask)  
  https://opentelemetry-python.readthedocs.io/en/latest/  
  https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html  
  [JavaScript](https://github.com/opentracing/opentracing-javascript)  
