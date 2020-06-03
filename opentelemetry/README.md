@@ -36,6 +36,7 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Jaeger](https://www.jaegertracing.io/)  
  [Jaeger getting started](https://www.jaegertracing.io/docs/1.18/getting-started/)  
  [Jaeger docker images](https://www.jaegertracing.io/download/#docker-images)  
+ [Установка клиента Jaeger в Python](https://github.com/jaegertracing/jaeger-client-python)  
  
  ### Opentelemetry JavaScript
  [OpenTelemetry JavaScript API and SDK](https://github.com/open-telemetry/opentelemetry-js)  
