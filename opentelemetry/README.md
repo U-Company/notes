@@ -24,7 +24,8 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Open tracing](https://opentracing.io/docs/overview/)  
  [OpenTracing Tutorial - Python](https://github.com/yurishkuro/opentracing-tutorial/tree/master/python)  
  https://opentelemetry-python.readthedocs.io/en/latest/  
- https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html
+ https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html  
+ [JavaScript](https://github.com/opentracing/opentracing-javascript)  
  
 
  [Тушим пожар. Трассировка с OpenTracing и Jaeger.](https://medium.com/@aablinov/%D1%82%D1%83%D1%88%D0%B8%D0%BC-%D0%BF%D0%BE%D0%B6%D0%B0%D1%80-%D1%82%D1%80%D0%B0%D1%81%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D1%81-opentracing-%D0%B8-jaeger-69f0ae553b86)  
