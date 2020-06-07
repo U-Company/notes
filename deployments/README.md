@@ -32,11 +32,20 @@ This command push your image to pypi-package-registry
 
 You must lay the config file `pip.conf` into `~/.pip/`:
 
-    [global]
-    index-url = http://<login>:<password>@<your-host>:<your-port>
-    trusted-host = pypi.python.org
-                   pypi.org
-                   <your-host>
+    [global]	
+    timeout = 3
+    retries = 0
+    extra-index-url =
+        https://pypi.org/simple
+        http://<login-1>:<password-1>@<your-host-1>:<your-port-1>
+        http://<your-host-2>:<your-port-2>
+    trusted-host = 
+        pypi.python.org
+        pypi.org
+        <your-host-1>:<your-port-1>
+        <your-host-2>:<your-port-2>
+        
+If you want to use some environments, you can create some `pip.conf` files. To specify the file location you can use `PIP_CONFIG_FILE` unix environment.
 
 # Publish image into docker registry (for local development and testing)
 
