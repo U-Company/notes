@@ -29,14 +29,14 @@ from opentelemetry.ext import jaeger
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-trace.get_tracer_provider().add_span_processor(
-    BatchExportSpanProcessor(ConsoleSpanExporter())
-)
+# trace.get_tracer_provider().add_span_processor(
+#     BatchExportSpanProcessor(ConsoleSpanExporter())
+# )
 # create a JaegerSpanExporter
 jaeger_exporter = jaeger.JaegerSpanExporter(
     service_name='flask_opentelemetry',
     # configure agent
-    agent_host_name='192.168.10.127',
+    agent_host_name='localhost',
     agent_port=6831,
     # optional: configure also collector
     # collector_host_name='localhost',
