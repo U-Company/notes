@@ -8,7 +8,7 @@ from flask import Flask, Blueprint, request, jsonify
 from flask_restx import Api, Resource, fields
 from opentelemetry.ext.flask import FlaskInstrumentor
 
-from opentelemetry import trace
+from opentelemetry import propagators, trace
 from opentelemetry.ext import jaeger
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
@@ -25,7 +25,7 @@ tracer = trace.get_tracer(__name__)
 jaeger_exporter = jaeger.JaegerSpanExporter(
     service_name='flask_opentelemetry',
     # configure agent
-    agent_host_name='localhost',
+    agent_host_name='192.168.10.127',
     agent_port=6831,
     # optional: configure also collector
     # collector_host_name='localhost',
@@ -165,8 +165,16 @@ def http_get_opentelemetry(host, port, path, param, value):
     # span.set_tag(tags.SPAN_KIND, tags.SPAN_KIND_RPC_CLIENT)
     # headers = {}
     # tracer.inject(span, Format.HTTP_HEADERS, headers)
+    with tracer.start_as_current_span("client-server"):
+        headers = {}
+        propagators.inject(dict.__setitem__, headers)
+        # requested = get(
+        #     "http://localhost:8082/server_request",
+        #     params={"param": argv[1]},
+        #     headers=headers,
+        # )
+        r = requests.get(url, params={param: value}, headers=headers,)
 
-    r = requests.get(url, params={param: value})
     # r = requests.get(url, params={param: value}, headers=headers)
     # assert r.status_code == 200, f"Real status_code: {r.status_code}"
     return r.text

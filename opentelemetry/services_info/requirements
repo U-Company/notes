@@ -27,6 +27,7 @@ opentelemetry-sdk
 opentelemetry-ext-jaeger
 opentelemetry-ext-sqlalchemy
 opentelemetry-opentracing-shim
+opentelemetry-instrumentation
 
 
 
