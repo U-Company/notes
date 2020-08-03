@@ -45,6 +45,8 @@ import app.internal.utils as utils
 from service_client.db import init_db, all_services, add_service, Service as Db_service, get_service_by_name_stage,\
     deactivate_service, activate_service
 
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
 service_name = f"{version.app_name} v.{version.app_version}"
 
 cfg = utils.init_env_and_logger()
@@ -54,7 +56,7 @@ logging.getLogger('').handlers = []
 logging.basicConfig(format='%(message)s', level=logging.DEBUG)
 
 app = FastAPI()
-
+FastAPIInstrumentor.instrument_app(app)
 # Добавить реализцию для OpenTracing Shim for OpenTelemetry
 
 # Tell OpenTelemetry which Tracer implementation to use.
@@ -162,6 +164,11 @@ async def root():
 
 @app.get("/ProcessHTTPRequestOpenTelemetry")
 async def httprequestopentelemetry():
+    span_ctx = tracer.extract(Format.HTTP_HEADERS, request.headers)
+    span_tags = {tags.SPAN_KIND: tags.SPAN_KIND_RPC_SERVER}
+    with tracer.start_active_span('format', child_of=span_ctx, tags=span_tags):
+        hello_to = request.args.get('helloTo')
+        return 'Hello, %s!' % hello_to
     with shim.start_active_span("ProcessHTTPRequestTelemetry"):
         print("Processing HTTP request (OpenTelemetry)")
         logger.info("Processing HTTP request (OpenTelemetry)")

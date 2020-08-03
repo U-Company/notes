@@ -56,9 +56,14 @@ OpenTracing - это API, с которым ваш код будет взаим�
 
 > pip install opentelemetry-ext-jaeger
 
- Для поддержки Flask следует установить:
+Для поддержки Flask следует установить:
 > pip install opentelemetry-ext-flask  
 > pip install opentelemetry-ext-requests
+
+
+Для поддержки FastAPI следует установить:
+> pip install opentelemetry-instrumentation-fastapi  
+
 
 
 ## Запуск Jaeger в docker
