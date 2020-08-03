@@ -23,8 +23,12 @@ OpenTracing - это API, с которым ваш код будет взаим�
  
  [Open tracing](https://opentracing.io/docs/overview/)  
  [OpenTracing Tutorial - Python](https://github.com/yurishkuro/opentracing-tutorial/tree/master/python)  
+ [Flask opentracing](https://github.com/opentracing-contrib/python-flask)  
+ [Flask-OpenTracing](https://pythonhosted.org/Flask-OpenTracing/)  
+ [Tutorial: Tracing Python Flask requests with OpenTracing](https://scoutapm.com/blog/tutorial-tracing-python-flask-requests-with-opentracing)  
  https://opentelemetry-python.readthedocs.io/en/latest/  
- https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html
+ https://opentelemetry-python.readthedocs.io/en/latest/getting-started.html  
+ [JavaScript](https://github.com/opentracing/opentracing-javascript)  
  
 
  [Тушим пожар. Трассировка с OpenTracing и Jaeger.](https://medium.com/@aablinov/%D1%82%D1%83%D1%88%D0%B8%D0%BC-%D0%BF%D0%BE%D0%B6%D0%B0%D1%80-%D1%82%D1%80%D0%B0%D1%81%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D1%81-opentracing-%D0%B8-jaeger-69f0ae553b86)  
@@ -35,7 +39,12 @@ OpenTracing - это API, с которым ваш код будет взаим�
  [Jaeger](https://www.jaegertracing.io/)  
  [Jaeger getting started](https://www.jaegertracing.io/docs/1.18/getting-started/)  
  [Jaeger docker images](https://www.jaegertracing.io/download/#docker-images)  
+ [Установка клиента Jaeger в Python](https://github.com/jaegertracing/jaeger-client-python)  
  
+ ### Opentelemetry JavaScript
+ [OpenTelemetry JavaScript API and SDK](https://github.com/open-telemetry/opentelemetry-js)  
+ [Getting Started with OpenTelemetry JS](https://github.com/open-telemetry/opentelemetry-js/tree/master/getting-started)  
+ [Пример использования](https://github.com/open-telemetry/opentelemetry-js/tree/master/packages/opentelemetry-web)  
 
 ## Install opentelemetry
 
@@ -57,17 +66,17 @@ OpenTracing - это API, с которым ваш код будет взаим�
 > docker pull jaegertracing/all-in-one:1.18  
 
 Запустить контейнер:  
->docker run -d --name jaeger \
-  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
-  -p 5775:5775/udp \
-  -p 6831:6831/udp \
-  -p 6832:6832/udp \
-  -p 5778:5778 \
-  -p 16686:16686 \
-  -p 14268:14268 \
-  -p 14250:14250 \
-  -p 9411:9411 \
-  jaegertracing/all-in-one:1.18
+>docker run -d --name jaeger \  
+>  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \  
+>  -p 5775:5775/udp \  
+>  -p 6831:6831/udp \  
+>  -p 6832:6832/udp \  
+>  -p 5778:5778 \  
+>  -p 16686:16686 \  
+>  -p 14268:14268 \  
+>  -p 14250:14250 \  
+>  -p 9411:9411 \  
+>  jaegertracing/all-in-one:1.18
 
 Ui Jaeger-а можно посмотреть по адрtсу http://localhost:16686
 
