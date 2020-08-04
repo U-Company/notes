@@ -1,12 +1,13 @@
 import aiohttp
-from fastapi import FastAPI,status
+from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 import uvicorn
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.ext.aiohttp_client import create_trace_config
 
-from opentelemetry.fastapi.utils import get_param
-from opentelemetry.fastapi.ot_utils import init_jaeger
+from utils import  get_param
+# from opentelemetry_examples.fastapi.utils import get_param
+from ot_utils import init_jaeger
 
 jaeger_host, server1_port, server2_port = get_param()
 init_jaeger(jaeger_host, 'fastapi_opentelemetry_server1')

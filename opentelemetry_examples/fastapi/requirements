@@ -1,4 +1,6 @@
 python-dotenv
+aiohttp
+requests
 loguru
 fastapi
 pathlib

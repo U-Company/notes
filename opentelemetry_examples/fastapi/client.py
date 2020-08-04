@@ -17,8 +17,8 @@ from sys import argv
 from requests import get
 
 from opentelemetry import propagators
-from opentelemetry.fastapi.utils import get_param
-from opentelemetry.fastapi.ot_utils import init_jaeger
+from utils import get_param
+from ot_utils import init_jaeger
 
 jaeger_host, server1_port, server2_port = get_param()
 
