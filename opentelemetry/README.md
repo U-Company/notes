@@ -127,9 +127,9 @@ Ui Jaeger-а можно посмотреть по адрtсу http://localhost:1
 > python metrics.py
 
 
-### Пример сервиса на FastAPI с использованием opentracing и opentelemetry [services_info](./services_info/README-services_info.md)
+### Пример сервиса на FastAPI с использованием opentelemetry [services_info](./opentelemetry/fastapi/RReadMe.md)
 
-Сервис позволяет сравнить вывод в Jaeger с использованием средств opentracing и opentelemetry. 
+Сервис выполняет ттрассировку вызовов 2-х сервисов. 
 
 
 
