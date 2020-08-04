@@ -28,6 +28,8 @@ opentelemetry-ext-jaeger
 opentelemetry-ext-sqlalchemy
 opentelemetry-opentracing-shim
 opentelemetry-instrumentation
+opentelemetry-ext-flask
+opentelemetry-ext-fastapi
 
 
 

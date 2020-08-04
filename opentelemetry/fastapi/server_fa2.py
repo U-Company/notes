@@ -1,3 +1,4 @@
+import aiohttp
 import fastapi
 import uvicorn
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
@@ -9,6 +10,9 @@ from opentelemetry.sdk.trace.export import (
     BatchExportSpanProcessor,
 )
 from opentelemetry.ext import jaeger
+from opentelemetry.fastapi.utils import get_param
+
+jaeger_host, server1_port, server2_port = get_param()
 
 app = fastapi.FastAPI()
 
@@ -19,9 +23,9 @@ trace.set_tracer_provider(TracerProvider())
 # )
 # create a JaegerSpanExporter
 jaeger_exporter = jaeger.JaegerSpanExporter(
-    service_name='fastapi_opentelemetry',
+    service_name='fastapi_opentelemetry_server2',
     # configure agent
-    agent_host_name='localhost',
+    agent_host_name=jaeger_host,
     agent_port=6831,
     # optional: configure also collector
     # collector_host_name='localhost',
@@ -38,11 +42,13 @@ span_processor = BatchExportSpanProcessor(jaeger_exporter)
 trace.get_tracer_provider().add_span_processor(span_processor)
 
 
+
 @app.get("/server_request")
-async def server_request():
-    return {"message": "hello world"}
+async def server_request(param: str):
+    print(f"param: {param}")
+    return "Good served server 2"
 
 FastAPIInstrumentor.instrument_app(app)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8082)
+    uvicorn.run(app, host="0.0.0.0", port=server2_port)

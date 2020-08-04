@@ -25,6 +25,9 @@ from opentelemetry.sdk.trace.export import (
 )
 
 from opentelemetry.ext import jaeger
+from opentelemetry.fastapi.utils import get_param
+
+jaeger_host, server1_port, server2_port = get_param()
 
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer_provider().get_tracer(__name__)
@@ -34,9 +37,9 @@ tracer = trace.get_tracer_provider().get_tracer(__name__)
 # )
 # create a JaegerSpanExporter
 jaeger_exporter = jaeger.JaegerSpanExporter(
-    service_name='flask_opentelemetry',
+    service_name='fastapi_opentelemetry_client',
     # configure agent
-    agent_host_name='localhost',
+    agent_host_name=jaeger_host,
     agent_port=6831,
     # optional: configure also collector
     # collector_host_name='localhost',
@@ -61,7 +64,7 @@ with tracer.start_as_current_span("client"):
         headers = {}
         propagators.inject(dict.__setitem__, headers)
         requested = get(
-            "http://localhost:8082/server_request",
+            f"http://localhost:{server1_port}/server_request",
             params={"param": argv[1]},
             headers=headers,
         )
