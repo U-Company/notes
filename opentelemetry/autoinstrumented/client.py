@@ -65,5 +65,6 @@ with tracer.start_as_current_span("client"):
             params={"param": argv[1]},
             headers=headers,
         )
+        
 
         assert requested.status_code == 200 or requested.status_code == 201
