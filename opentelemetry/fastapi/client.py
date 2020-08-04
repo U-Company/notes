@@ -16,45 +16,13 @@ from sys import argv
 
 from requests import get
 
-from opentelemetry import propagators, trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    ConsoleSpanExporter,
-    SimpleExportSpanProcessor,
-    BatchExportSpanProcessor,
-)
-
-from opentelemetry.ext import jaeger
+from opentelemetry import propagators
 from opentelemetry.fastapi.utils import get_param
+from opentelemetry.fastapi.ot_utils import init_jaeger
 
 jaeger_host, server1_port, server2_port = get_param()
 
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer_provider().get_tracer(__name__)
-
-# trace.get_tracer_provider().add_span_processor(
-#     BatchExportSpanProcessor(ConsoleSpanExporter())
-# )
-# create a JaegerSpanExporter
-jaeger_exporter = jaeger.JaegerSpanExporter(
-    service_name='fastapi_opentelemetry_client',
-    # configure agent
-    agent_host_name=jaeger_host,
-    agent_port=6831,
-    # optional: configure also collector
-    # collector_host_name='localhost',
-    # collector_port=14268,
-    # collector_endpoint='/api/traces?format=jaeger.thrift',
-    # username=xxxx, # optional
-    # password=xxxx, # optional
-)
-
-# Create a BatchExportSpanProcessor and add the exporter to it
-span_processor = BatchExportSpanProcessor(jaeger_exporter)
-
-# add to the tracer
-trace.get_tracer_provider().add_span_processor(span_processor)
-
+tracer = init_jaeger(jaeger_host, 'fastapi_opentelemetry_client')
 
 assert len(argv) == 2
 
@@ -68,6 +36,5 @@ with tracer.start_as_current_span("client"):
             params={"param": argv[1]},
             headers=headers,
         )
-
 
         assert requested.status_code == 200 or requested.status_code == 201
