@@ -1,6 +1,6 @@
 # Notes
 
-[Opentelemetry](./opentelemetry/README.md)
+[Opentelemetry](./opentelemetry_examples/README.md)
 
 [Deployments](./deployments/README.md)
 
