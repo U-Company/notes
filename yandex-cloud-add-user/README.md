@@ -10,7 +10,7 @@ Connect to your machine by ssh:
 
     ssh username@1.2.3.4
     
-Turn on `sudo` mode:
+Turn on `sudo` mode (this is a very important step):
 
     sudo su
 
