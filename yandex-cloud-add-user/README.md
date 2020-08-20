@@ -19,7 +19,7 @@ Create new user:
     mkdir ../username
     useradd username
     
-Copy ssh-key to `username` homedir:
+Copy ssh-key to `username` homedir (`id_rsa_key.pub -> ../username/.ssh/authorized_keys`):
 
     mkdir ../username/.ssh
     mv id_rsa_key.pub ../username/.ssh/authorized_keys
