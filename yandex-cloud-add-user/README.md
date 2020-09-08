@@ -51,4 +51,7 @@ Open `90-cloud-init-users`:
  
     username ALL=(ALL) NOPASSWD:ALL
 
+Now, you can enter as `username`:
+
+    sudo -u username bash
     
