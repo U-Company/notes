@@ -1,5 +1,6 @@
 # guides
 
+- deployments
 - tech
 - python style guide
 - vuejs style guide
