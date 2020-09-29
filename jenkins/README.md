@@ -11,13 +11,14 @@ https://plugins.jenkins.io/folder-auth/
 
 Для того, чтобы создать новый ключ доступа или изменить уже существующий, необходимо
 
-1. System Configuration
+System Configuration -> Configure System -> Credentials
 
-
-
--> Configure System
+Здесь Вы можете создавать ключи. Лучше это сделать в глобальном scope. Например, создавать ssh-ключи стоит именно так. В jenkins для ssh есть специальный вид ключа. Поэтому это сделать очень просто.
 
 # Секреты
+
+
+
 # Хосты
 
 # Настройка деплоя
