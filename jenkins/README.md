@@ -24,5 +24,3 @@ System Configuration -> Credentials
 System Configuration -> Configure System -> SSH remote hosts
 
 Здесь Вы выбираете секреты, а также указываете хост и порт. Для ssh это порт 22
-
-# Настройка деплоя
