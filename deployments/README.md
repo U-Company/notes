@@ -49,6 +49,8 @@ You must to set this file into `$HOME` directory. If you want to change location
     
 You can read more [here](https://ru.stackoverflow.com/questions/1228778/%d0%9a%d0%b0c%d1%82%d0%be%d0%bc%d0%bd%d1%8b%d0%b9-%d0%bf%d1%83%d1%82%d1%8c-%d0%b4%d0%be-pypirc) in russian or here in [english](https://stackoverflow.com/questions/37845125/custom-location-for-pypirc-file).
 
+Note that some imports in the IDE may be marked as not found. Do not be afraid of this. Everything works fine from the console.
+
 # Publish package to private_pypi pypi server
 
 Before publish, set differences into CHANGELOG.md, setup.py version. After that, you need to create new release into master branch on 
