@@ -17,7 +17,37 @@ Before publishing, you need to create file `~/.pypirc` like this:
     username: <username_private_pipy_registry>
     password: <password_private_pipy_registry>
     
-You must to set this file into home directory. 
+You must to set this file into `$HOME` directory. If you want to change location of `.pypirc`, you need cutomize class in `setup.py`:
+
+    # this is your project's setup.py script
+
+    import os
+    from distutils.command.register import register as register_orig
+    from distutils.command.upload import upload as upload_orig
+
+    from setuptools import setup
+
+
+    class register(register_orig):
+
+        def _get_rc_file(self):
+            return os.path.join('.', '.pypirc')
+
+    class upload(upload_orig):
+
+        def _get_rc_file(self):
+            return os.path.join('.', '.pypirc')
+
+    setup(
+        name='myproj',
+        ...
+        cmdclass={
+            'register': register,
+            'upload': upload,
+        }
+    )
+    
+You can read more [here](https://ru.stackoverflow.com/questions/1228778/%d0%9a%d0%b0c%d1%82%d0%be%d0%bc%d0%bd%d1%8b%d0%b9-%d0%bf%d1%83%d1%82%d1%8c-%d0%b4%d0%be-pypirc) in russian or here in [english](https://stackoverflow.com/questions/37845125/custom-location-for-pypirc-file).
 
 # Publish package to private_pypi pypi server
 
